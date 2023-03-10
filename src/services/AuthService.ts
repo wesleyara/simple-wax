@@ -40,7 +40,7 @@ export const AuthService = (
     const auth = account.getPermission(proof.signer.permission).required_auth;
     const valid = proof.verify(auth, account.head_block_time);
     if (!valid) {
-      throw new Error("Proof invalid or expired");
+      console.log("Proof invalid or expired");
     }
     const proofKey = proof.recover();
     return {
