@@ -61,13 +61,15 @@ export const AuthService = (
               // const callback = new URL(window.location).searchParams.get('u') || '/collection';
               const anchorSessions = getAnchorSessions();
               const json = JSON.parse(anchorSessions);
-              console.log(json);
+              const currentSession = json.find((item: any) =>
+                item.key.includes(`${appName}-list`),
+              );
 
-              const anchorSession = JSON.parse(json[0].value);
+              const parsedSession = JSON.parse(currentSession.value)[0].auth;
 
               const AnchorWallet = {
-                accountName: anchorSession.data.auth.actor,
-                requestPermission: anchorSession.data.auth.permission,
+                accountName: parsedSession.actor,
+                requestPermission: parsedSession.permission,
                 wallet: "anchor",
               };
 
