@@ -24,7 +24,7 @@ interface IAuthProvider {
 interface IActiveUserData {
   accountName: string;
   requestPermission: string;
-  wallet: string;
+  wallet: "wax" | "anchor";
 }
 
 interface IAuthService {
