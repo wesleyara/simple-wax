@@ -1,28 +1,126 @@
-# Typescript template
+<h1 align="center" title="Vite Helper">
+  simple-wax
+</h1>
 
-This is a template for [Typescript](https://www.typescriptlang.org/) projects.
+<h2 align="center">A library for simplifies WAX + React integration.</h2>
 
-It comes with:
+[![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.png?v=103)](https://github.com/ellerbrock/open-source-badges/)
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.png?v=103)](https://opensource.org/licenses/mit-license.php)
+[![npm version](https://img.shields.io/npm/v/simple-wax.svg?style=flat-square)](https://www.npmjs.com/package/simple-wax)
+[![npm downloads](https://img.shields.io/npm/dm/simple-wax.svg?style=flat-square)](http://npm-stat.com/charts.html?package=cz-conventional-changelog&from=2015-08-01) <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section --> [![All Contributors](https://img.shields.io/badge/all_contributors-2-green.svg?style=flat-square)](#contributors-) <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-- [Vitest](https://vitest.dev/) for testing
-- [Prettier](https://prettier.io/) for formatting
-- [ESLint](https://eslint.org/) for linting
-- [Rimraf](https://www.npmjs.com/package/rimraf) for cleaning
-- [Husky](https://typicode.github.io/husky/#/) for git hooks
-- [Commitlint](https://commitlint.js.org/#/) for commit linting
-- [Lint-staged](https://github.com/okonet/lint-staged) for linting staged files
-- [Axios](https://axios-http.com/) for HTTP requests
+<h4 align="center">
+ <a href="#-how-use">:rocket: How use</a> •
+ <a href="#️-tools">🛠️ Tools</a> •
+ <a href="#-contributing">:pencil: Contributing</a> •
+ <a href="#-thanks">:adult: Thanks</a> •
+ <a href="#-license">:page_facing_up: License</a>
+</h4>
 
-# Contributing
+<br>
 
-Your contribution to the `typescript-template` is essential for the evolution of the project, you can do it as follows:
+# :rocket: How use
 
-- Open an [issue](https://github.com/wesleyara/typescript-template/issues) to clear doubts, report bugs or give ideas
-- Open a [pull request](https://github.com/wesleyara/typescript-template/pulls) to give ideas for code improvement, implementation of new features and bug fixes
+Instalation:
 
-These are just some of the ways you can contribute to the project read the [CONTRIBUTING](https://github.com/wesleyara/typescript-template/blob/main/.github/CONTRIBUTING.md) for more information
+```bash
+npm install simple-wax@latest
+#or
+yarn add simple-wax@latest
+```
 
-# Authors
+Answer the questions (When choosing the tool, use the arrows keys to navigate, the spacebar to select and enter to finish)
+
+---
+
+Start integration adding the _AuthProvider_ component to your application:
+
+```js
+import { AuthProvider } from "simple-wax";
+import App from "./App";
+
+const endpoint = "http://wax-testnet.cryptolions.io/";
+const chainId =
+  "f16b1833c747c43682f4386fca9cbb327929334a762755ebec17f6f23c9b8a12";
+const appName = "simple-wax";
+
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+  <React.StrictMode>
+    <AuthProvider endpoint={endpoint} chainId={chainId} appName={appName}>
+      <App />
+    </AuthProvider>
+  </React.StrictMode>
+);
+
+```
+
+Now you can use the _useAuth_ hook to get the user data:
+
+```js
+import { useAuth } from "simple-wax";
+
+const App = () => {
+  const { activeUserData, handleAnchorSignIn, handleWaxSignIn, handleLogout } = useAuth();
+
+  return (
+    <div>
+      <h1>Simple Wax</h1>
+      <button onClick={handleWaxSignIn}>WAX Login</button>
+      <button onClick={handleAnchorSignIn}>Anchor Login</button>
+      <button onClick={handleLogout}>Logout</button>
+      <p>{JSON.stringify(activeUserData)}</p>
+    </div>
+  );
+};
+```
+
+For dispatching actions, you can use the _ActionSevice_ method:
+
+```js
+import { useAuth } from "simple-wax";
+
+const App = () => {
+  const { activeUserData, ActionService } = useAuth();
+
+  const handleBuy = () => {
+    const authorization = [
+      {
+        actor: activeUserData?.accountName,
+        permission: activeUserData?.requestPermission,
+      },
+    ];
+
+    const action = {
+      //... add action account and name
+      authorization,
+      //... add action data
+    }
+
+    const actions = [action];
+
+    ActionService(activeUserData?.wallet, actions);
+  }
+
+  return (
+    <div>
+      <h1>Simple Wax</h1>
+      <button onClick={handleBuy}>Buy</button>
+    </div>
+  );
+};
+```
+
+
+# :pencil: Contributing
+
+Your contribution to the `simple-wax` is essential for the evolution of the project, you can do it as follows:
+
+- Open an [issue](https://github.com/wesleyara/simple-wax/issues) to clear doubts, report bugs or give ideas
+- Open a [pull request](https://github.com/wesleyara/simple-wax/pulls) to give ideas for code improvement, implementation of new features and bug fixes
+
+These are just some of the ways you can contribute to the project read the [CONTRIBUTING](https://github.com/wesleyara/simple-wax/blob/main/.github/CONTRIBUTING.md) for more information
+
+# :adult: Authors
 
 <table>
   <tr>
@@ -44,6 +142,10 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
-## License
+# :page_facing_up: License
 
-Typescript template is a open source project licensed as [MIT](LICENSE).
+simple-wax is a open source project licensed as [MIT](LICENSE).
+
+```
+
+```
