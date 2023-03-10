@@ -11,9 +11,8 @@ import React, {
   useState,
 } from "react";
 
+import AuthService from "../services/AuthService";
 import { getStorage } from "../utils";
-
-const AuthService = require("../services/AuthService");
 
 interface IAuthProvider {
   endpoint: string;
@@ -190,7 +189,7 @@ export const AuthProvider = ({
         });
       case "anchor":
         return new Promise(resolve => {
-          const auth = new AuthService(endpoint, chainId, appName);
+          const auth = AuthService(endpoint, chainId, appName);
           const anchorLink = auth?.anchorLink as any;
           return anchorLink.restoreSession(appName).then((session: any) => {
             session

@@ -7,7 +7,11 @@ import Cookies from "js-cookie";
 
 import { getStorage, rpcEndpoint } from "../utils";
 
-export const AuthService = (endpoint, chainId, appName) => {
+export const AuthService = (
+  endpoint: string,
+  chainId: string,
+  appName: string,
+) => {
   const selectedEndpoint = rpcEndpoint(endpoint);
   const anchorLink = new AnchorLink({
     chains: [
@@ -19,7 +23,7 @@ export const AuthService = (endpoint, chainId, appName) => {
     transport: new AnchorLinkBrowserTransport({}),
   });
 
-  const verifyProof = async identity => {
+  const verifyProof = async (identity: any) => {
     const proof = IdentityProof.from(identity.proof);
     let account;
     try {
@@ -55,7 +59,7 @@ export const AuthService = (endpoint, chainId, appName) => {
           .then(account => {
             if (account && identity) {
               // const callback = new URL(window.location).searchParams.get('u') || '/collection';
-              const anchorSessions = AuthService.getAnchorSessions();
+              const anchorSessions = getAnchorSessions();
               const json = JSON.parse(anchorSessions);
               console.log(json);
 
@@ -138,9 +142,9 @@ export const AuthService = (endpoint, chainId, appName) => {
   //     }
   // }
 
-  const setAnchorCookie = (domain, url) => {
+  const setAnchorCookie = (domain: any, url: any) => {
     for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
+      const key: any = localStorage.key(i);
       if (key.includes("anchor-link")) {
         const now = new Date();
         const time = now.getTime();
@@ -148,14 +152,14 @@ export const AuthService = (endpoint, chainId, appName) => {
         const expireTime = time + 1000 * (expireMins * 60);
         now.setTime(expireTime);
 
-        const options = {
+        const options: any = {
           sameSite: "lax",
           path: "/",
           domain,
           secure: url.includes("https://"),
           expires: now,
         };
-        const value = localStorage.getItem(key);
+        const value: any = localStorage.getItem(key);
         Cookies.set(
           decodeURIComponent(key),
           decodeURIComponent(value),
@@ -168,7 +172,7 @@ export const AuthService = (endpoint, chainId, appName) => {
   const getAnchorSessions = () => {
     const anchorSessions = [];
     for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
+      const key: any = localStorage.key(i);
       if (key.includes("anchor-link")) {
         const value = localStorage.getItem(key);
         anchorSessions.push({
