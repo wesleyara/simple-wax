@@ -96,9 +96,10 @@ const App = () => {
       //... add action data
     }
 
-    const actions = [action];
-
-    ActionService(activeUserData?.wallet, actions);
+    ActionService({
+    type: activeUserData?.wallet,
+    actions: [action],
+  });
   }
 
   return (
