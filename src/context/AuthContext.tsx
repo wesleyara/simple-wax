@@ -64,7 +64,7 @@ export const AuthProvider = ({
   });
   const [now, setNow] = useState<number>(Date.now());
 
-  const auth = new AuthService(endpoint, chainId, appName);
+  const auth = AuthService(endpoint, chainId, appName);
 
   const handleWaxSignIn = async () => {
     await auth.handleWaxSignIn();

@@ -7,41 +7,23 @@ import Cookies from "js-cookie";
 
 import { getStorage, rpcEndpoint } from "../utils";
 
-class AuthService {
-  constructor(endpoint, chainId, appName) {
-    const selectedEndpoint = rpcEndpoint(endpoint);
-    this.anchorLink = new AnchorLink({
-      chains: [
-        {
-          chainId,
-          nodeUrl: selectedEndpoint,
-        },
-      ],
-      transport: new AnchorLinkBrowserTransport({}),
-    });
+export const AuthService = (endpoint, chainId, appName) => {
+  const selectedEndpoint = rpcEndpoint(endpoint);
+  const anchorLink = new AnchorLink({
+    chains: [
+      {
+        chainId,
+        nodeUrl: selectedEndpoint,
+      },
+    ],
+    transport: new AnchorLinkBrowserTransport({}),
+  });
 
-    this.appName = appName;
-    this.endpoint = endpoint;
-  }
-
-  endpoint = () => {
-    return this.endpoint;
-  };
-
-  appName = () => {
-    return this.appName;
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  anchorLink = async () => {
-    return this.anchorLink;
-  };
-
-  verifyProof = async identity => {
+  const verifyProof = async identity => {
     const proof = IdentityProof.from(identity.proof);
     let account;
     try {
-      account = await this.anchorLink.client.v1.chain.get_account(
+      account = await anchorLink.client.v1.chain.get_account(
         proof.signer.actor,
       );
     } catch (error) {
@@ -65,16 +47,17 @@ class AuthService {
     };
   };
 
-  handleAnchorSignIn = async () => {
-    this.anchorLink
-      .login(this.appName)
+  const handleAnchorSignIn = async () => {
+    anchorLink
+      .login(appName)
       .then(identity => {
-        this.verifyProof(identity)
+        verifyProof(identity)
           .then(account => {
             if (account && identity) {
               // const callback = new URL(window.location).searchParams.get('u') || '/collection';
               const anchorSessions = AuthService.getAnchorSessions();
               const json = JSON.parse(anchorSessions);
+              console.log(json);
 
               const anchorSession = JSON.parse(json[0].value);
 
@@ -104,10 +87,10 @@ class AuthService {
       });
   };
 
-  handleWaxSignIn = async () => {
+  const handleWaxSignIn = async () => {
     try {
       const wax = new waxjs.WaxJS({
-        rpcEndpoint: this.endpoint,
+        rpcEndpoint: endpoint,
         tryAutoLogin: true,
       });
       wax.login().then(account => {
@@ -133,7 +116,7 @@ class AuthService {
     }
   };
 
-  handleSignOut = async () => {
+  const handleSignOut = async () => {
     try {
       if (getStorage("Anchor")) {
         localStorage.removeItem("Anchor");
@@ -155,7 +138,7 @@ class AuthService {
   //     }
   // }
 
-  static setAnchorCookie = (domain, url) => {
+  const setAnchorCookie = (domain, url) => {
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key.includes("anchor-link")) {
@@ -182,7 +165,7 @@ class AuthService {
     }
   };
 
-  static getAnchorSessions = () => {
+  const getAnchorSessions = () => {
     const anchorSessions = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
@@ -196,6 +179,16 @@ class AuthService {
     }
     return JSON.stringify(anchorSessions);
   };
-}
+
+  return {
+    anchorLink,
+    verifyProof,
+    handleAnchorSignIn,
+    handleWaxSignIn,
+    handleSignOut,
+    setAnchorCookie,
+    getAnchorSessions,
+  };
+};
 
 export default AuthService;
