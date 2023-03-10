@@ -1,5 +1,5 @@
 {
-  "name": "change-project-name",
+  "name": "simple-wax",
   "version": "1.0.2",
   "description": "change-description.",
   "main": "lib/index.js",
@@ -26,7 +26,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/change-autor/change-project-name.git"
+    "url": "git+https://github.com/change-autor/simple-wax.git"
   },
   "keywords": [
     "typescript",
@@ -35,17 +35,25 @@
   "author": "change-autor",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/change-autor/change-project-name/issues"
+    "url": "https://github.com/change-autor/simple-wax/issues"
   },
-  "homepage": "https://github.com/change-autor/change-project-name#readme",
+  "homepage": "https://github.com/change-autor/simple-wax#readme",
   "dependencies": {
+    "@waxio/waxjs": "^1.3.0",
+    "anchor-link": "^3.5.1",
+    "anchor-link-browser-transport": "^3.5.1",
     "axios": "^1.2.0",
+    "eosio-signing-request": "^2.5.2",
+    "js-cookie": "^3.0.1",
+    "react": "^18.2.0",
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.3.0",
     "@commitlint/config-conventional": "^17.1.0",
+    "@types/js-cookie": "^3.0.3",
     "@types/node": "^18.11.9",
+    "@types/react": "^18.0.28",
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",
     "eslint": "^8.28.0",

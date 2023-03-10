@@ -22,22 +22,12 @@
     "import/extensions": "off",
     "import/no-unresolved": "off",
     "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/naming-convention": "off",
     "no-unused-vars": [
       "error",
       {
         "argsIgnorePattern": "^_",
         "varsIgnorePattern": "^_"
-      }
-    ],
-    "@typescript-eslint/naming-convention": [
-      "error",
-      {
-        "selector": "interface",
-        "format": ["PascalCase"],
-        "custom": {
-          "regex": "^I[A-Z]",
-          "match": true
-        }
       }
     ],
     "import-helpers/order-imports": [
