@@ -1,6 +1,6 @@
 {
   "name": "simple-wax",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "description": "Library for simplifies WAX + React integration.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
