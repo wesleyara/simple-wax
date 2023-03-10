@@ -8,7 +8,7 @@ import Cookies from "js-cookie";
 import { getStorage, rpcEndpoint } from "../utils";
 
 class AuthService {
-  constructor(endpoint: string, chainId: string, appName: string) {
+  constructor(endpoint, chainId, appName) {
     const selectedEndpoint = rpcEndpoint(endpoint);
     this.anchorLink = new AnchorLink({
       chains: [
@@ -37,7 +37,7 @@ class AuthService {
     return this.anchorLink;
   };
 
-  verifyProof = async (identity: any) => {
+  verifyProof = async identity => {
     const proof = IdentityProof.from(identity.proof);
     let account;
     try {
@@ -68,7 +68,7 @@ class AuthService {
   handleAnchorSignIn = async () => {
     this.anchorLink
       .login(this.appName)
-      .then((identity: any) => {
+      .then(identity => {
         this.verifyProof(identity)
           .then(account => {
             if (account && identity) {
@@ -99,7 +99,7 @@ class AuthService {
             console.log(error);
           });
       })
-      .catch((error: any) => {
+      .catch(error => {
         console.log(error);
       });
   };
@@ -155,9 +155,9 @@ class AuthService {
   //     }
   // }
 
-  static setAnchorCookie = (domain: any, url: any) => {
+  static setAnchorCookie = (domain, url) => {
     for (let i = 0; i < localStorage.length; i++) {
-      const key: any = localStorage.key(i);
+      const key = localStorage.key(i);
       if (key.includes("anchor-link")) {
         const now = new Date();
         const time = now.getTime();
@@ -165,14 +165,14 @@ class AuthService {
         const expireTime = time + 1000 * (expireMins * 60);
         now.setTime(expireTime);
 
-        const options: any = {
+        const options = {
           sameSite: "lax",
           path: "/",
           domain,
           secure: url.includes("https://"),
           expires: now,
         };
-        const value: any = localStorage.getItem(key);
+        const value = localStorage.getItem(key);
         Cookies.set(
           decodeURIComponent(key),
           decodeURIComponent(value),
@@ -185,7 +185,7 @@ class AuthService {
   static getAnchorSessions = () => {
     const anchorSessions = [];
     for (let i = 0; i < localStorage.length; i++) {
-      const key: any = localStorage.key(i);
+      const key = localStorage.key(i);
       if (key.includes("anchor-link")) {
         const value = localStorage.getItem(key);
         anchorSessions.push({

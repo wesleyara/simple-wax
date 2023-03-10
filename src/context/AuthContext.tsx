@@ -1,15 +1,19 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable no-unused-vars */
 import * as waxjs from "@waxio/waxjs/dist";
 import React, {
   createContext,
   Dispatch,
   ReactNode,
   SetStateAction,
+  useContext,
   useEffect,
   useState,
 } from "react";
 
-import AuthService from "../services/AuthService";
 import { getStorage } from "../utils";
+
+const AuthService = require("../services/AuthService");
 
 interface IAuthProvider {
   endpoint: string;
@@ -37,7 +41,12 @@ interface AuthContextProps {
   handleWaxSignIn: () => Promise<void>;
   handleAnchorSignIn: () => Promise<void>;
   handleLogout: () => Promise<void>;
-  ActionService: () => Promise<void>;
+  ActionService: ({
+    type,
+    actions,
+    successFunction,
+    errorFunction,
+  }: IAuthService) => Promise<any>;
 }
 
 export const AuthContext = createContext({} as AuthContextProps);
@@ -223,4 +232,10 @@ export const AuthProvider = ({
       {children}
     </AuthContext.Provider>
   );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+
+  return context;
 };
