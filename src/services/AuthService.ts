@@ -1,8 +1,7 @@
 /* eslint-disable no-undef */
 import * as waxjs from "@waxio/waxjs/dist";
-import AnchorLink, { APIError } from "anchor-link";
+import AnchorLink from "anchor-link";
 import AnchorLinkBrowserTransport from "anchor-link-browser-transport";
-import { IdentityProof } from "eosio-signing-request";
 import Cookies from "js-cookie";
 
 import { getStorage, rpcEndpoint } from "../utils";
@@ -23,70 +22,62 @@ export const AuthService = (
     transport: new AnchorLinkBrowserTransport({}),
   });
 
-  const verifyProof = async (identity: any) => {
-    const proof = IdentityProof.from(identity.proof);
-    let account;
-    try {
-      account = await anchorLink.client.v1.chain.get_account(
-        proof.signer.actor,
-      );
-    } catch (error) {
-      if (error instanceof APIError && error.code === 0) {
-        throw new Error("No such account");
-      } else {
-        throw error;
-      }
-    }
-    const auth = account.getPermission(proof.signer.permission).required_auth;
-    const valid = proof.verify(auth, account.head_block_time);
-    if (!valid) {
-      console.log("Proof invalid or expired");
-    }
-    const proofKey = proof.recover();
-    return {
-      account,
-      proof,
-      proofKey,
-      proofValid: valid,
-    };
-  };
+  // const verifyProof = async (identity: any) => {
+  //   const proof = IdentityProof.from(identity.proof);
+  //   let account;
+  //   try {
+  //     account = await anchorLink.client.v1.chain.get_account(
+  //       proof.signer.actor,
+  //     );
+  //   } catch (error) {
+  //     if (error instanceof APIError && error.code === 0) {
+  //       throw new Error("No such account");
+  //     } else {
+  //       throw error;
+  //     }
+  //   }
+  //   const auth = account.getPermission(proof.signer.permission).required_auth;
+  //   const valid = proof.verify(auth, account.head_block_time);
+  //   if (!valid) {
+  //     console.log("Proof invalid or expired");
+  //   }
+  //   const proofKey = proof.recover();
+  //   return {
+  //     account,
+  //     proof,
+  //     proofKey,
+  //     proofValid: valid,
+  //   };
+  // };
 
   const handleAnchorSignIn = async () => {
     anchorLink
       .login(appName)
-      .then(identity => {
-        verifyProof(identity)
-          .then(account => {
-            if (account && identity) {
-              // const callback = new URL(window.location).searchParams.get('u') || '/collection';
-              const anchorSessions = getAnchorSessions();
-              const json = JSON.parse(anchorSessions);
-              const currentSession = json.find((item: any) =>
-                item.key.includes(`${appName}-list`),
-              );
+      .then(() => {
+        // const callback = new URL(window.location).searchParams.get('u') || '/collection';
+        const anchorSessions = getAnchorSessions();
+        const json = JSON.parse(anchorSessions);
+        const currentSession = json.find((item: any) =>
+          item.key.includes(`${appName}-list`),
+        );
 
-              const parsedSession = JSON.parse(currentSession.value)[0].auth;
+        const parsedSession = JSON.parse(currentSession.value)[0].auth;
 
-              const AnchorWallet = {
-                accountName: parsedSession.actor,
-                requestPermission: parsedSession.permission,
-                wallet: "anchor",
-              };
+        const AnchorWallet = {
+          accountName: parsedSession.actor,
+          requestPermission: parsedSession.permission,
+          wallet: "anchor",
+        };
 
-              if (getStorage("Wax")) {
-                localStorage.removeItem("Wax");
-              }
+        if (getStorage("Wax")) {
+          localStorage.removeItem("Wax");
+        }
 
-              if (getStorage("Anchor")) {
-                localStorage.removeItem("Anchor");
-              }
+        if (getStorage("Anchor")) {
+          localStorage.removeItem("Anchor");
+        }
 
-              localStorage.setItem("Anchor", JSON.stringify(AnchorWallet));
-            }
-          })
-          .catch(error => {
-            console.log(error);
-          });
+        localStorage.setItem("Anchor", JSON.stringify(AnchorWallet));
       })
       .catch(error => {
         console.log(error);
@@ -188,7 +179,6 @@ export const AuthService = (
 
   return {
     anchorLink,
-    verifyProof,
     handleAnchorSignIn,
     handleWaxSignIn,
     handleSignOut,
